@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Robo Grocery Express</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    body {margin:0;padding:0;min-height:100vh;
+      background:linear-gradient(135deg,#6a89ff 0%,#f857a6 40%,#ff5858 100%);}
+    .title {
+      font-family: 'Montserrat',sans-serif;
+      text-align:center;color:#fff;font-size:2.1em;font-weight:700;
+      padding:32px 10px 17px;text-shadow:0 3px 18px #544cffc4,0 1px 0 #fff;
+      letter-spacing:0.01em;
+      animation:titlePop 1.2s;
+    }
+    @keyframes titlePop {
+      0%{transform:scale(0.77) rotate(-7deg);opacity:0;}
+      60%{transform:scale(1.15) rotate(2deg);}
+      100%{transform:scale(1);opacity:1;}
+    }
+    .main {max-width:430px;background:#fff;
+      margin:0 auto 22px;border-radius:20px;box-shadow:0 8px 40px #8a98ec98;
+      padding:24px;}
+    .card-row {display:flex;flex-wrap:wrap;gap:14px;}
+    .item-card {
+      flex:1 1 44%;min-width:135px;
+      background:linear-gradient(150deg,#ecf2ff 54%,#ffebf4 100%);
+      border-radius:14px;margin-bottom:14px;align-items:center;
+      padding:12px 2px 21px;box-shadow:0 2px 8px #bebcff55;
+      display:flex;flex-direction:column;position:relative;cursor:pointer;
+      border:2.2px solid #ffd6a0;transition:.15s;
+      animation:itemIn .6s;
+    }
+    @keyframes itemIn {
+      0%{transform:translateY(25px) scale(.6);opacity:0;}
+      90%{transform:translateY(-5px) scale(1.09);}
+      100%{transform:translateY(0) scale(1);}
+    }
+    .item-img{width:55px;height:55px;object-fit:cover;border-radius:12px;
+      box-shadow:0 2px 12px #ecd0fe97;}
+    .item-qtybar {margin:9px 0 1px;display:flex;align-items:center;gap:8px;}
+    .qty-btn {
+      width:29px;height:29px;font-weight:700;border-radius:50%;
+      background:linear-gradient(135deg,#8584ef,#f857a6);color:#fff;
+      border:none;font-size:1.3em;box-shadow:0 2px 7px #8567ff18;transition:.15s;}
+    .qty-btn:active{background:#7e57c2;}
+    .qtyval {padding:0 3px;width:26px;text-align:center;font-weight:700;}
+    .add-btn {background:#ff4a1c;color:#fff;border-radius:7px;
+      font-weight:600;font-family:'Montserrat',sans-serif;padding:7px 13px;
+      border:none;box-shadow:0 1px 9px #ff8fa178; margin-bottom:6px; font-size:1em; transition:.17s;}
+    .item-card.in-cart{border:2.6px solid #544cff;background:#f2ecfe;animation:cartBounce 0.34s;}
+    @keyframes cartBounce {
+      0%{transform:scale(1);}
+      35%{transform:scale(1.13);}
+      60%{transform:scale(0.98);}
+      100%{transform:scale(1);}
+    }
+    .cart-btn {
+      position: fixed; bottom:32px;left:50%;transform:translateX(-50%);
+      z-index:70;padding:12px 36px;background:#544cff; color:#fff;font-size:1.18em;
+      font-weight:700;border:none;border-radius:29px;box-shadow:0 2px 18px #cabdffb9;
+      letter-spacing:.02em;transition:.20s;animation:cartPop 1s;
+    }
+    @keyframes cartPop {
+      0%{transform:translateY(70px) scale(0.3);}
+      70%{transform:translateY(-9px) scale(1.14);}
+      100%{transform:translateY(0) scale(1);}
+    }
+    .form-label{font-weight:700;}
+    .input, select {
+      width:100%;padding:10px 12px;border-radius:7px;border:1.5px solid #9a98b6;margin:6px 0 15px;
+      font-size:1.07em;background:#f7f4fe;
+      font-family:'Montserrat',sans-serif;
+    }
+    .order-btn {
+      width:100%;background:#544cff;color:#fff;padding:13px 0;
+      border-radius:8px;border:none;font-size:1.21em;font-weight:700;
+      box-shadow:0 2px 12px #aa92fa35;letter-spacing:0.03em;
+      margin-bottom:14px;margin-top:7px;transition:background .19s;
+    }
+    .order-btn:active{background:#f857a6;}
+    #mainstatus{background:#fffbe6;border-radius:11px;padding:11px 3px;margin:9px 0 0;box-shadow:0 2px 7px #eadefd;}
+    #orderResult{text-align:center;color:#2dc568;font-size:1.13em;font-weight:700}
+    .popup-bg{position:fixed;z-index:99;top:0;left:0;width:100vw;height:100vh;background:rgba(60,30,96,.32);}
+    .popup{background:#fff;padding:30px 18px 15px;max-width:360px;width:92vw;
+      margin:60px auto 0;border-radius:17px;box-shadow:0 7px 28px #cfd1ffb8;position:relative;text-align:center;animation:popUp .21s;}
+    .popup-btn{background:#544cff;color:#fff;font-size:1.09em;border-radius:7px;border:none;padding:10px 18px;margin-top:13px;box-shadow:0 1px 9px #bdb8ee;font-weight:600;}
+    @keyframes popUp{0%{transform:scale(.82);opacity:0;}100%{transform:scale(1);opacity:1;}}
+    /* --- CART STYLING --- */
+    .cart-item-img {
+      width:38px;height:38px;object-fit:cover;border-radius:8px;
+      margin-right:7px;border:2px solid #bbbefa;
+    }
+    .cart-list-row {
+      display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid #e4e5fd96;padding:7px 0;
+    }
+    .cart-row-prods{display:flex;align-items:center;}
+    .cart-qty-btn {
+      background:#f857a6;color:#fff;border:none;width:21px;height:21px;border-radius:50%;font-size:1em;padding:0 0 2px 0;line-height:20px;margin:0 2px; font-weight:900; }
+    .cart-remove-btn {
+      background: #d63b5cff; color: #fff; border: none; border-radius: 7px;
+      padding: 6px 15px; margin-left: 5px; font-weight: 600;
+      font-family:'Montserrat',sans-serif; transition:.18s;border:1.5px solid #fff1;
+    }
+    .cart-remove-btn:active {background: #8e1b46;}
+    @media(max-width: 500px){
+      .main{max-width:98vw;padding:5vw;}
+      .card-row{gap:7px;}
+      .item-card{min-width:44vw;}
+      .item-img{width:14vw;height:14vw;}
+    }
+  </style>
+</head>
+<body>
+  <div class="title">Robo Express Grocery<br>Order & Track</div>
+  <div class="main">
+    <div class="card-row" id="productRow">
+      <!-- Product cards will be inserted here -->
+    </div>
+    <form id="orderForm" autocomplete="off">
+      <label class="form-label">Your Name:</label>
+      <input class="input" name="name" required placeholder="Enter your name">
+      <label class="form-label">Delivery Location:</label>
+      <select class="input" name="location">
+        <option>Hostel Gate</option>
+        <option>Room 201</option>
+        <option>Mess Counter</option>
+        <option>Block B Entrance</option>
+        <option>Main Lawn</option>
+      </select>
+      <label class="form-label">Delivery Password (6 digits):</label>
+      <input class="input" type="password" minlength="6" maxlength="6" name="password" required placeholder="Enter 6-digit code">
+      <input type="hidden" name="item" id="itemInput">
+      <button class="order-btn" type="submit">Place Order</button>
+    </form>
+    <div id="orderResult"></div>
+    <div id="mainstatus"></div>
+  </div>
+  <button class="cart-btn" id="cartBtn" onclick="showCart()">View Cart <span id="cartCount"></span></button>
+  <div id="popupHolder"></div>
+<script>
+const API = "https://grocery-robo-delivery.up.railway.app/api"; // Change to your API!
+
+const products = [
+  { name:"Rice 1 Kg", img:"https://i.imgur.com/95fjurt.png" },
+  { name:"Tomato 500g", img:"https://i.imgur.com/DvQgBsm.jpg" },
+  { name:"Onion 1 Kg", img:"https://i.imgur.com/nhC0XQf.jpg" },
+  { name:"Oil 1L", img:"https://i.imgur.com/gqgMWCz.jpg" },
+  { name:"Milk 500ml", img:"https://i.imgur.com/SrUWmU2.jpg" },
+  { name:"Egg 6 pcs", img:"https://i.imgur.com/2Rt4NvR.jpg" },
+  { name:"Soap Bar", img:"https://i.imgur.com/vV2UwSt.jpg" },
+  { name:"Biscuits", img:"https://i.imgur.com/KErkABr.jpg" }
+];
+
+let cart = [];
+let tempQtys = products.map(_=>1); // used for card selection before adding
+
+function renderProducts() {
+  let row = document.getElementById('productRow');
+  row.innerHTML = '';
+  products.forEach((p,i)=>{
+    let inCart = cart.find(ci=>ci.idx===i);
+    row.innerHTML += `<div class="item-card${inCart?' in-cart':''}">
+      <img class="item-img" src="${p.img}" alt="${p.name}">
+      <div><b>${p.name}</b></div>
+      <div class="item-qtybar">
+        <button class="qty-btn" onclick="changeTempQty(event,${i},-1)">-</button>
+        <span class="qtyval" id="qtyshow${i}">${tempQtys[i]}</span>
+        <button class="qty-btn" onclick="changeTempQty(event,${i},+1)">+</button>
+      </div>
+      <button class="add-btn" onclick="addToCart(event,${i})">${inCart?'In Cart!':'Add to Cart'}</button>
+    </div>`;
+  });
+  updateCartCount();
+}
+
+function changeTempQty(e, idx, dir) {
+  e.stopPropagation();
+  tempQtys[idx] = Math.max(1, tempQtys[idx] + dir);
+  document.getElementById('qtyshow'+idx).innerText = tempQtys[idx];
+}
+
+function addToCart(ev, idx) {
+  ev.stopPropagation();
+  let existing = cart.findIndex(ci=>ci.idx===idx);
+  if(existing<0){
+    cart.push({idx,qty:tempQtys[idx]});
+    renderProducts();
+  } else {
+    cart[existing].qty = tempQtys[idx];
+    renderProducts();
+    showCart();
+  }
+}
+
+function removeFromCart(cartIndex) {
+  cart.splice(cartIndex,1);
+  closePopup();
+  renderProducts();
+  showCart();
+  updateCartCount();
+}
+
+function changeCartQty(i,delta){
+  cart[i].qty = Math.max(1, cart[i].qty+delta);
+  showCart();
+}
+
+function showCart() {
+  let html = `<div>
+    <h3 style="margin-bottom:10px;color:#544cff;">Your Cart</h3>`;
+  if(cart.length===0) html += `<div style="color:#888">No items in cart.</div>`;
+  else {
+    cart.forEach((c,i)=>{
+      html += `<div class="cart-list-row">
+        <span class="cart-row-prods">
+          <img class="cart-item-img" src="${products[c.idx].img}" alt="">
+          <span style="font-weight:700">${products[c.idx].name}</span>
+          <button class="cart-qty-btn" onclick="changeCartQty(${i},-1)">-</button>
+          <span class="qtyval">${cart[i].qty}</span>
+          <button class="cart-qty-btn" onclick="changeCartQty(${i},+1)">+</button>
+        </span>
+        <button class="cart-remove-btn" onclick="removeFromCart(${i})">Remove</button>
+      </div>`;
+    });
+  }
+  html += `<button class="popup-btn" onclick="closePopup()">Close</button></div>`;
+  showPopup(html);
+}
+
+function updateCartCount() {
+  document.getElementById('cartCount').innerText = cart.length;
+}
+
+function showPopup(html) {
+  document.getElementById('popupHolder').innerHTML =
+    `<div class="popup-bg" onclick="closePopup()">
+      <div class="popup" onclick="event.stopPropagation()">${html}</div>
+    </div>`;
+}
+function closePopup(){document.getElementById('popupHolder').innerHTML='';}
+
+renderProducts();
+
+document.getElementById('orderForm').onsubmit = async (e) => {
+  e.preventDefault();
+  if(cart.length===0){
+    showPopup('Add at least one item to cart!');
+    return;
+  }
+  const form = Object.fromEntries(new FormData(e.target));
+  // Make a readable list:
+  form.item = cart.map(c=>products[c.idx].name+" (x"+c.qty+")").join(", ");
+  document.getElementById("orderResult").innerHTML = "Placing order...";
+  let res = await fetch(API+"/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});
+  let js = await res.json();
+  if(js.status==="ORDERED"){
+    showPopup("<b>Your order is placed!</b><br>When robot arrives:<br>1. Enter your 6-digit password on the robot and press C.<br>2. The OTP will show on this website.<br>3. Enter OTP on robot and press C again.<br><b>Track live status below.</b>");
+    cart=[];renderProducts();
+  }
+  document.getElementById("orderResult").innerHTML = js.status==="ORDERED" ? "Order accepted!" : "Order error.";
+  updateStatus();
+};
+
+async function updateStatus() {
+  let res = await fetch(API+"/status");
+  let js = await res.json();
+  let stat = `<b>Status:</b> ${js.status || "–"}`;
+  if(js.order) stat+=`<br><b>Order:</b> ${js.order.name}, ${js.order.location}, ${js.order.item}`;
+  document.getElementById("mainstatus").innerHTML=stat;
+}
+updateStatus();
+</script>
+</body>
+</html>
