@@ -1,222 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Robo Delivery | Grocery Order</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <title>RoboGrocery - Place Your Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      background: linear-gradient(135deg, #b2a1ff 0%, #99e5ff 100%);
-      min-height:100vh;margin:0;font-family:'Segoe UI',Arial,sans-serif;
-      color:#38307c;background-attachment:fixed;
-    }
-    .header {
-      font-size:2.1em;text-align:center;font-weight:900;padding:38px 0 14px 0;letter-spacing:.04em;
-      color:#5749b7;text-shadow:0 8px 40px #c3c8f9;
-    }
-    .content {
-      max-width:420px;margin:0 auto;background:rgba(255,255,255,0.95);border-radius:29px;
-      padding:16px 17px 24px 17px;box-shadow:0 7px 29px #c4cbf988;
-    }
-    .grid {
-      display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:9px;
-    }
-    .prod {
-      background:rgba(220,206,255,0.85);border-radius:16px;border:1.7px solid #b6b4fc;
-      padding:16px 11px 24px 11px; width:124px; text-align:center; margin-top:10px;
-      box-shadow:0 1px 11px #d6cfff63;transition:transform .18s;
-    }
-    .prod:hover {transform:scale(1.06);}
-    .prod img {width:45px;height:45px;border-radius:12px;box-shadow:0 1px 3px #e2e0fb96;}
-    .prod-name {font-size:1em;font-weight:800;padding-top:5px;color:#5749b7;}
-    .prod-price {font-size:.91em;color:#7344df;}
-    .qty-row {display:flex;align-items:center;justify-content:center;gap:11px;margin-top:9px;}
-    .qty-btn {background:#7344df;color:#fff;font-size:1.09em;font-weight:900;
-      border:none;padding:5px 15px;border-radius:10px;cursor:pointer;}
-    .qty-num {min-width:20px;text-align:center;font-size:1.13em;color:#3882c3;font-weight:900;}
-    .cart-area {
-      background:rgba(160,180,255,0.41);border-radius:14px;max-width:390px;
-      margin:12px auto 0; padding:13px 13px 13px 13px;
-      box-shadow: 0 1px 7px #b3d3fc62;color:#6245a8;
-    }
-    .cart-badge {
-      background:#7344df;color:#fff;font-weight:900;border-radius:49px;width:31px;height:31px;
-      text-align:center;display:inline-block;margin-left:6px;font-size:1em;box-shadow:0 1px 7px #f2e9fc;}
-    .cart-item-row {display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-    .cart-item-name {font-size:.97em;font-weight:700;}
-    .cart-item-qty {color:#5778cf;font-size:.94em;}
-    .cart-item-price {font-size:.99em;color:#af5cff;}
-    .cart-rm-btn {background:#7344df;color:#fff;border:none;border-radius:8px;font-size:0.97em;padding:2px 10px;cursor:pointer;}
-    .cart-total {color:#3882c3;font-weight:900;font-size:1.14em;margin:13px 0 8px 0;}
-    .order-box {
-      background:rgba(244,242,251,0.72);box-shadow:0 0px 10px #aaa1fd36;
-      border-radius:13px; padding:11px 12px;margin-top:7px;
-    }
-    .ord-btn {
-      background: #af5cff; color:#fff;font-weight:900;font-size:1.25em;border:none;
-      border-radius:14px;box-shadow:0 5px 22px #af5cff44;
-      padding:13px 0;width:100%;margin-top:11px;cursor:pointer;
-      transition:box-shadow .11s,transform .09s,background .09s;
-    }
-    .ord-btn:active {background:#7344df;box-shadow:0 8px 28px #6245a844;transform:scale(1.05);}
-    .statusbar {
-      background:#b0cdfa;color:#5447b7;font-weight:900;border-radius:13px;
-      padding:13px 0;margin:18px 0 7px 0;text-align:center;font-size:1.08em;
-    }
-    input,select {
-      width:97%;border-radius:9px;margin-bottom:12px;font-size:1em;padding:9px;border:1.3px solid #7344df;
-      background:#e3e7fb;font-weight:700;
-    }
-    .otpModal {
-      display:none; position:fixed; left: 50vw; top:46vh; transform:translate(-50%,-46%);
-      background: #b2a1ff; color:#4e4b94;border-radius:18px; padding:29px 22px;z-index:10;font-size:1.2em;box-shadow:0 7px 19px #b2a1ff44;
-    }
-    .otpModal.show {display:block;}
-    .close-btn {
-      background:#7344df;color:#fff;font-size:1em;font-weight:700;border:none;border-radius:9px; padding:11px 28px;margin-top:21px;box-shadow:0 2px 7px #ded7ffbb;cursor:pointer;}
-    @media (max-width:500px) {.content{max-width:99vw;}.cart-area{max-width:97vw;}}
+    body { background: linear-gradient(120deg, #96fbc4 0%, #f9f586 100%); font-family: 'Segoe UI', Arial, sans-serif; margin:0; min-height:100vh;}
+    .container { max-width: 480px; background: #fffbea; margin: 2em auto; border-radius: 18px; box-shadow: 0 3px 24px #0002; padding: 2em 1.3em; }
+    h1 { text-align: center; color: #3a953a; font-size:2rem; letter-spacing:1px; margin-bottom:12px;}
+    .cart { margin: 12px 0 20px 0; }
+    .item-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; padding: 8px 0; border-bottom: 1px solid #f7df94;}
+    .item-name { font-weight: 600; color: #396b9c;}
+    .item-controls button { background: #fed24d; border: none; border-radius: 50%; width: 34px; height: 34px; font-size: 1.35rem; margin: 0 3px; transition: background 0.15s;}
+    .item-controls button:hover { background: #ff9800; color: #fff;}
+    .item-qty { font-size: 1.1rem; width:32px; text-align:center;}
+    .input-row { margin: 18px 0;}
+    .input-row label { display: block; margin-bottom:5px;}
+    .input-row input, .input-row select { width:95%; padding:8px; border-radius:7px; font-size:1em; border:1.5px solid #e3e36b; }
+    .order-btn { width:100%; background:#ffab00; color:#fff; font-size:1.75em; font-weight:700;
+      border:none; padding:20px 0 17px 0; border-radius:12px; margin-top:28px; box-shadow:0 2px 15px #fff4, 0 2px 8px #e6b34399;
+      transition: background 0.18s, transform 0.07s;}
+    .order-btn:active { background:#ffb733; transform:scale(0.99);}
+    .status-box { margin: 24px 0 8px 0; padding: 1.3em; border-radius: 11px; font-size:1.16em; background: #e3faf1; color: #1a2b37; box-shadow: 0 1px 6px #36ed7777;}
+    .otp-box { background: #ff658e; color:#fff; border-radius:12px; font-size:2em; margin-top:22px; text-align:center; font-weight: bold; padding:17px;}
+    .progress-bar {margin:22px 0 14px 0;display:flex;justify-content:space-between;}
+    .progress-step {font-size:1.2em;border-radius: 9px;padding:8px 13px;background:#f7df94;color:#987700;font-weight:600;}
+    .progress-step.active {background:#2ad29f;color:#fff;}
+    .progress-step.done {background:#c7fab5;color:#35611c;}
+    @media (max-width:490px){.container{border-radius:0;box-shadow:none;margin:0;}}
   </style>
 </head>
 <body>
-  <div class="header">Robo Delivery | Grocery Order</div>
-  <div class="content">
-    <div class="grid" id="catalog"></div>
-    <div class="cart-area" id="cartBar" style="display:none;">
-      <b>Cart <span class="cart-badge" id="cartBadge" style="display:none;">0</span></b>
-      <div id="cartItems"></div>
-      <div class="cart-total" id="cartTotal"></div>
+  <div class="container">
+    <h1>🤖🍅 RoboGrocery</h1>
+    <div class="input-row">
+      <label for="custname">Your Name:</label>
+      <input type="text" id="custname" maxlength="30" placeholder="Full name" autocomplete="off"/>
     </div>
-    <div class="order-box">
-      <input id="name" placeholder="Your Name" maxlength="18">
+    <div class="cart" id="cart">
+      <!-- Cart dynamically generated -->
+    </div>
+    <div class="input-row">
+      <label for="location">Delivery Location:</label>
       <select id="location">
-        <option>Select Delivery Location</option>
-        <option>Block A</option><option>Block B</option>
-        <option>Hostel</option><option>Library</option>
-        <option>Lab 1</option><option>Lab 2</option>
-        <option>Staffroom</option>
+        <option value="">-- Select --</option>
+        <option value="Avadi Main Road">Avadi Main Road</option>
+        <option value="Anna Nagar">Anna Nagar</option>
+        <option value="Sembakkam">Sembakkam</option>
+        <option value="Chennai Central">Chennai Central</option>
+        <option value="Thirumullaivoyal">Thirumullaivoyal</option>
+        <option value="Red Hills">Red Hills</option>
+        <option value="Ambattur">Ambattur</option>
+        <option value="Mogappair West">Mogappair West</option>
       </select>
-      <input id="password" type="password" autocomplete="off" maxlength="6" placeholder="Set 6-digit Password">
-      <button class="ord-btn" onclick="placeOrder()">🛒 Place Order</button>
-      <div class="statusbar" id="status"><span>Waiting for order...</span></div>
     </div>
-  </div>
-  <div class="otpModal" id="otpModal">
-    <h2 style="margin-top:0;margin-bottom:15px;">Delivery OTP</h2>
-    <div id="otpText" style="font-size:2em;color:#7344df;margin-bottom:9px;letter-spacing:.16em;"></div>
-    <button class="close-btn" onclick="closeModal()">Close</button>
+    <div class="input-row">
+      <label for="password">Set 6-digit Password:</label>
+      <input type="password" id="password" maxlength="6" pattern="[0-9]{6}" placeholder="******" autocomplete="new-password"/>
+    </div>
+    <button class="order-btn" onclick="placeOrder()">🛒 Place Order</button>
+    <div id="progress" style="display:none;"></div>
+    <div id="status" style="display:none;"></div>
+    <div id="otp" style="display:none;"></div>
   </div>
   <script>
-const products = [
-  {name:"Potato (1kg)",price:22,img:"https://images.pexels.com/photos/4110255/pexels-photo-4110255.jpeg"},
-  {name:"Milk 500ml",price:27,img:"https://images.pexels.com/photos/65175/pexels-photo-65175.jpeg"},
-  {name:"Brown Bread",price:32,img:"https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg"},
-  {name:"Onion (1kg)",price:15,img:"https://images.pexels.com/photos/742755/pexels-photo-742755.jpeg"},
-  {name:"Eggs (6)",price:34,img:"https://images.pexels.com/photos/162712/pexels-photo-162712.jpeg"},
-  {name:"Apples (4)",price:50,img:"https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg"},
-  {name:"Tomato (1kg)",price:19,img:"https://images.pexels.com/photos/1435906/pexels-photo-1435906.jpeg"}
-];
-const API = "https://robo-delivery-backend-production.up.railway.app"; // <-- Use your backend URL!
-let cart = [];
-function renderCatalog() {
-  let h = "";
-  products.forEach((p,i)=>{
-    h+=`<div class="prod">
-      <img src="${p.img}" alt="prod">
-      <div class="prod-name">${p.name}</div>
-      <div class="prod-price">₹${p.price}</div>
-      <div class="qty-row">
-        <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
-        <span class="qty-num">${cart.find(x=>x.idx==i)?.qty||0}</span>
-        <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-      </div>
-    </div>`;
-  });
-  catalog.innerHTML = h;
-}
-function changeQty(idx,delta){
-  let found = cart.find(x=>x.idx==idx);
-  if(found) {
-    found.qty += delta;
-    if(found.qty<=0) cart = cart.filter(x=>x.idx!=idx);
-  } else if(delta>0) {
-    cart.push({idx:idx,qty:1});
-  }
-  renderCatalog(); renderCart();
-}
-function renderCart() {
-  if(!cart.length) { cartBar.style.display="none"; cartBadge.style.display="none"; return;}
-  cartBar.style.display="block";
-  cartBadge.style.display="inline-block";
-  cartBadge.innerText=cart.reduce((n,x)=>n+x.qty,0);
-  cartItems.innerHTML = cart.map(x=>{
-    let p = products[x.idx];
-    return `<div class="cart-item-row">
-      <span class="cart-item-name">${p.name}</span>
-      <span class="cart-item-qty">x${x.qty}</span>
-      <span class="cart-item-price">₹${p.price*x.qty}</span>
-      <button class="cart-rm-btn" onclick="removeFromCart(${x.idx})">Remove</button>
-    </div>`;
-  }).join("");
-  cartTotal.innerHTML = "Total: ₹"+cart.reduce((s,x)=>s+products[x.idx].price*x.qty,0);
-}
-function removeFromCart(idx) {
-  cart = cart.filter(x=>x.idx!=idx);
-  renderCatalog(); renderCart();
-}
-function isSixDigitPassword(pwd) {
-  // Validate exactly 6 digits, only numbers
-  return /^d{6}$/.test(pwd);
-}
-function placeOrder() {
-  if(!cart.length) { status.innerHTML='<span>🛒 Add some items!</span>'; return; }
-  if(!isSixDigitPassword(password.value)) {
-    status.innerHTML='<span style="color:#af5cff">Set 6-digit numeric password!</span>';
-    password.style.borderColor="#af5cff";
-    password.focus();
-    return;
-  } else {
-    password.style.borderColor="#7344df";
-  }
-  let items = cart.map(x=>products[x.idx].name+" x"+x.qty).join(", ");
-  fetch(API + "/orders", {
-    method: "POST",
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      name: name.value,
-      location: location.value,
-      item: items,
-      password: password.value
-    })})
-    .then(r=>r.json()).then(out=>{
-      status.innerHTML = '<span>⏳ Order Placed - Waiting for Shopkeeper!</span>';
-      setTimeout(refreshStatus, 1300);
-      cart=[]; renderCart(); renderCatalog();
-    });
-}
-function refreshStatus() {
-  fetch(API + "/orders").then(res => res.json()).then(data => {
-    let txt="", ico="⌛";
-    let order = Array.isArray(data) ? data.find(o => o.name === name.value) : data;
-    if (!order) { txt="Waiting for order..."; }
-    else if (order.status=="ORDERED") txt="Order Placed - Waiting for Shopkeeper!";
-    else if (order.status=="DISPATCHED") txt="Robo Delivering!";
-    else if (order.status=="ARRIVED_AT_CUSTOMER") {
-      txt=`Robo Arrived! Enter password and OTP (shown here) at robo keypad.`;
-      showOTP(order.otp);
+    // API root
+    const API = 'https://robo-backend-production-34af.up.railway.app/api';
+
+    // Products
+    let products = [
+      { name: "Tomato", qty: 0 },
+      { name: "Banana", qty: 0 },
+      { name: "Maggie Noodles", qty: 0 },
+      { name: "Onion", qty: 0 },
+      { name: "Milk Packet", qty: 0 },
+      { name: "Soap", qty: 0 },
+      { name: "Toothpaste", qty: 0 },
+      { name: "Potato", qty: 0 }
+    ];
+
+    function renderCart() {
+      const cartDiv = document.getElementById("cart");
+      cartDiv.innerHTML = "<b style='color:#172758'>Your Cart:</b>";
+      products.forEach((p, i) => {
+        cartDiv.innerHTML += `
+          <div class="item-row">
+            <span class="item-name">${p.name}</span>
+            <div class="item-controls">
+              <button onclick="addItem(${i}, -1)">-</button>
+              <span class="item-qty">${p.qty}</span>
+              <button onclick="addItem(${i}, 1)">+</button>
+            </div>
+          </div>
+        `;
+      });
     }
-    else if (order.status=="DELIVERY_COMPLETED") txt="Delivered! Enjoy 🥳";
-    status.innerHTML = `<span>${txt}</span>`;
-  });
-}
-function showOTP(code) {
-  if (!code) return;
-  otpText.innerText = code;
-  otpModal.classList.add("show");
-}
-function closeModal() { otpModal.classList.remove("show"); }
-renderCatalog();
-renderCart();
-setInterval(refreshStatus, 2200);
-refreshStatus();
+    renderCart();
+
+    function addItem(idx, delta) {
+      products[idx].qty = Math.max(0, products[idx].qty + delta);
+      renderCart();
+    }
+
+    function getSelectedItems() {
+      return products.filter(p => p.qty > 0).map(p => `${p.name} (${p.qty})`);
+    }
+
+    // Place Order logic
+    function placeOrder() {
+      let name = document.getElementById("custname").value.trim();
+      let items = getSelectedItems();
+      let password = document.getElementById("password").value.trim();
+      let fake_location = document.getElementById("location").value;
+      if (!name || name.length < 3) { alert("Please enter your name!"); return; }
+      if (items.length === 0) { alert("Add at least one item!"); return; }
+      if (!/^[0-9]{6}$/.test(password)) { alert("Enter a valid 6-digit password!"); return; }
+      if (!fake_location) { alert("Choose a delivery location!"); return; }
+      fetch(API + "/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, items, password, fake_location })
+      }).then(r => r.json()).then(d => {
+        startStatusPolling();
+        showStatus("Order placed! Packing started...", "ORDERED");
+      });
+    }
+
+    // Progress tracker
+    const steps = [
+      {code: "ORDERED", label:"Packing"},
+      {code: "DISPATCHED", label:"Robo Arriving"},
+      {code: "WAIT_PASSWORD", label:"At your door! Enter Password"},
+      {code: "WAIT_OTP", label:"Enter OTP"},
+      {code: "DELIVERED", label:"Delivered!"}
+    ];
+    function renderProgress(current) {
+      let pHtml = '<div class="progress-bar">';
+      steps.forEach((step, idx) => {
+        let c = current === step.code ? 'active': steps.findIndex(s=>s.code===current) > idx ? 'done': '';
+        pHtml += `<span class="progress-step ${c}">${step.label}</span>`;
+      });
+      pHtml += '</div>';
+      document.getElementById("progress").innerHTML = pHtml;
+      document.getElementById("progress").style.display = '';
+    }
+
+    // Status polling logic
+    let statusInterval = null;
+    function startStatusPolling() {
+      if (statusInterval) clearInterval(statusInterval);
+      statusInterval = setInterval(getStatus, 1200);
+    }
+
+    function getStatus() {
+      fetch(API + "/status").then(r=>r.json()).then(d=>{
+        document.getElementById("status").innerHTML = 
+          `<div class="status-box">${d.status_message}</div>`;
+        document.getElementById("status").style.display = 'block';
+        renderProgress(d.status_code||"ORDERED");
+        if(d.status_code === "WAIT_OTP" && d.otp) {
+          document.getElementById("otp").style.display = "block";
+          document.getElementById("otp").innerHTML = `<div class="otp-box">Your OTP:<br>${d.otp}</div>`;
+        } else {
+          document.getElementById("otp").style.display = "none";
+        }
+      });
+    }
+
+    function showStatus(msg, code) {
+      document.getElementById("status").innerHTML = `<div class="status-box">${msg}</div>`;
+      document.getElementById("status").style.display = 'block';
+      renderProgress(code || "ORDERED");
+    }
   </script>
 </body>
 </html>
